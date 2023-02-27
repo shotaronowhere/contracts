@@ -81,7 +81,7 @@ contract NameRegistryGasUsageTest is Test {
             vm.warp(block.timestamp + COMMIT_REGISTER_DELAY);
             uint256 balance = alice.balance;
             vm.prank(alice);
-            nameRegistry.register{value: 0.01 ether}(name, alice, "secret", RECOVERY);
+            nameRegistry.registerfname{value: 0.01 ether}(name, alice, "secret", RECOVERY);
 
             uint256 firstExpiration = block.timestamp + REGISTRATION_PERIOD;
 

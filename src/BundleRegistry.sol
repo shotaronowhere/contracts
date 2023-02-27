@@ -87,7 +87,7 @@ contract BundleRegistry is Ownable {
         // Audit: is it possible to end up in a state where one passes but the other fails?
         idRegistry.register(to, recovery, url);
 
-        nameRegistry.register{value: msg.value}(username, to, secret, recovery);
+        nameRegistry.registerfname{value: msg.value}(username, to, secret, recovery);
 
         // Return any funds returned by the NameRegistry back to the caller
         if (address(this).balance > 0) {

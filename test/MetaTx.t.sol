@@ -128,7 +128,7 @@ contract MetaTxTest is Test {
         vm.warp(block.timestamp + 60);
         uint256 fee = nameRegistry.fee();
         vm.prank(relayer);
-        nameRegistry.register{value: fee}(bytes16("alice"), alice, bytes32("secret"), recovery);
+        nameRegistry.registerfname{value: fee}(bytes16("alice"), alice, bytes32("secret"), recovery);
         assertEq(nameRegistry.ownerOf(uint256(bytes32("alice"))), alice);
 
         address bob = address(bytes20(bytes32("bob")));

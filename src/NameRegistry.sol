@@ -429,7 +429,7 @@ contract NameRegistry is
      * @param secret   The secret value in the commitment
      * @param recovery The address which can recovery the fname if the custody address is lost
      */
-    function register(bytes16 fname, address to, bytes32 secret, address recovery) external payable {
+    function registerfname(bytes16 fname, address to, bytes32 secret, address recovery) external payable {
         bytes32 commit = generateCommit(fname, to, secret, recovery);
 
         uint256 _fee = fee;

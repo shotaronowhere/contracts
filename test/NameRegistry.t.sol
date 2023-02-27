@@ -311,7 +311,7 @@ contract NameRegistryTest is Test {
         vm.expectEmit(true, true, true, true);
         emit Transfer(address(0), bob, BOB_TOKEN_ID);
         vm.prank(alice);
-        nameRegistry.register{value: amount}("bob", bob, secret, recovery);
+        nameRegistry.registerfname{value: amount}("bob", bob, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), 0);
         assertEq(nameRegistry.ownerOf(BOB_TOKEN_ID), bob);
@@ -344,7 +344,7 @@ contract NameRegistryTest is Test {
         nameRegistry.makeCommit(commitHashAlice);
         vm.warp(block.timestamp + delay_alice);
         uint256 aliceRegister = block.timestamp;
-        nameRegistry.register{value: nameRegistry.fee()}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: nameRegistry.fee()}("alice", alice, secret, recovery);
 
         // make this assertion before Alice's registration expires
         assertEq(nameRegistry.ownerOf(ALICE_TOKEN_ID), alice);
@@ -354,7 +354,7 @@ contract NameRegistryTest is Test {
         nameRegistry.makeCommit(commitHashBob);
         vm.warp(block.timestamp + delay_bob);
         uint256 bobRegister = block.timestamp;
-        nameRegistry.register{value: FEE}("bob", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("bob", alice, secret, recovery);
         vm.stopPrank();
 
         assertEq(nameRegistry.timestampOf(commitHashAlice), 0);
@@ -394,7 +394,7 @@ contract NameRegistryTest is Test {
 
         // 3. Register the name alice
         vm.prank(alice);
-        nameRegistry.register{value: FEE}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", alice, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), 0);
         assertEq(nameRegistry.ownerOf(ALICE_TOKEN_ID), alice);
@@ -426,7 +426,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + delay);
 
         vm.prank(alice);
-        nameRegistry.register{value: FEE}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", alice, secret, recovery);
         uint256 registerTs = block.timestamp;
         assertEq(nameRegistry.timestampOf(aliceCommitHash), 0);
 
@@ -438,7 +438,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.prank(bob);
         vm.expectRevert("ERC721: token already minted");
-        nameRegistry.register{value: FEE}("alice", bob, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", bob, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(bobCommitHash), commitTs);
         assertEq(nameRegistry.ownerOf(ALICE_TOKEN_ID), alice);
@@ -460,7 +460,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
 
         vm.prank(alice);
-        nameRegistry.register{value: FEE}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", alice, secret, recovery);
         uint256 registerTs = block.timestamp;
         assertEq(nameRegistry.timestampOf(aliceCommitHash), 0);
 
@@ -473,7 +473,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.prank(bob);
         vm.expectRevert("ERC721: token already minted");
-        nameRegistry.register{value: FEE}("alice", bob, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", bob, secret, recovery);
 
         assertEq(expiry(ALICE_TOKEN_ID), registerTs + REGISTRATION_PERIOD);
         vm.expectRevert(NameRegistry.Expired.selector);
@@ -489,7 +489,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.prank(bob);
         vm.expectRevert("ERC721: token already minted");
-        nameRegistry.register{value: FEE}("alice", bob, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", bob, secret, recovery);
 
         assertEq(expiry(ALICE_TOKEN_ID), registerTs + REGISTRATION_PERIOD);
         vm.expectRevert(NameRegistry.Expired.selector);
@@ -511,7 +511,7 @@ contract NameRegistryTest is Test {
         vm.prank(alice);
         uint256 balance = alice.balance;
         vm.expectRevert(NameRegistry.InsufficientFunds.selector);
-        nameRegistry.register{value: 0.0001 ether}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: 0.0001 ether}("alice", alice, secret, recovery);
 
         vm.expectRevert("ERC721: invalid token ID");
         assertEq(nameRegistry.ownerOf(ALICE_TOKEN_ID), address(0));
@@ -531,7 +531,7 @@ contract NameRegistryTest is Test {
         bytes16 username = "bob";
         vm.prank(alice);
         vm.expectRevert(NameRegistry.InvalidCommit.selector);
-        nameRegistry.register{value: FEE}(username, bob, secret, recovery);
+        nameRegistry.registerfname{value: FEE}(username, bob, secret, recovery);
 
         vm.expectRevert("ERC721: invalid token ID");
         assertEq(nameRegistry.ownerOf(BOB_TOKEN_ID), address(0));
@@ -564,7 +564,7 @@ contract NameRegistryTest is Test {
         vm.prank(alice);
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.expectRevert(NameRegistry.InvalidCommit.selector);
-        nameRegistry.register{value: FEE}(username, bob, incorrectSecret, recovery);
+        nameRegistry.registerfname{value: FEE}(username, bob, incorrectSecret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -599,7 +599,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.prank(alice);
         vm.expectRevert(NameRegistry.InvalidCommit.selector);
-        nameRegistry.register{value: FEE}(username, incorrectOwner, secret, recovery);
+        nameRegistry.registerfname{value: FEE}(username, incorrectOwner, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -633,7 +633,7 @@ contract NameRegistryTest is Test {
         vm.expectRevert(NameRegistry.InvalidCommit.selector);
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.prank(alice);
-        nameRegistry.register{value: FEE}(incorrectUsername, bob, secret, recovery);
+        nameRegistry.registerfname{value: FEE}(incorrectUsername, bob, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -661,7 +661,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY - 1);
         vm.prank(alice);
         vm.expectRevert(NameRegistry.InvalidCommit.selector);
-        nameRegistry.register{value: FEE}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", alice, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -684,7 +684,7 @@ contract NameRegistryTest is Test {
 
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.expectRevert(NameRegistry.InvalidName.selector);
-        nameRegistry.register{value: FEE}(incorrectUsername, alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}(incorrectUsername, alice, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(invalidCommit), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -713,7 +713,7 @@ contract NameRegistryTest is Test {
         nameRegistry.pause();
         vm.prank(alice);
         vm.expectRevert("Pausable: paused");
-        nameRegistry.register{value: FEE}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", alice, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -737,7 +737,7 @@ contract NameRegistryTest is Test {
         // call register() from address(this) which is non-payable
         // overpay by 1 wei to return funds which causes the revert
         vm.expectRevert(NameRegistry.CallFailed.selector);
-        nameRegistry.register{value: FEE + 1 wei}("alice", alice, secret, recovery);
+        nameRegistry.registerfname{value: FEE + 1 wei}("alice", alice, secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -760,7 +760,7 @@ contract NameRegistryTest is Test {
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
         vm.expectRevert("ERC721: mint to the zero address");
         vm.prank(alice);
-        nameRegistry.register{value: FEE}("alice", address(0), secret, recovery);
+        nameRegistry.registerfname{value: FEE}("alice", address(0), secret, recovery);
 
         assertEq(nameRegistry.timestampOf(commitHash), commitTs);
         vm.expectRevert("ERC721: invalid token ID");
@@ -3239,7 +3239,7 @@ contract NameRegistryTest is Test {
         nameRegistry.makeCommit(commitHash);
         vm.warp(block.timestamp + COMMIT_REVEAL_DELAY);
 
-        nameRegistry.register{value: nameRegistry.fee()}(username, user, "secret", address(0));
+        nameRegistry.registerfname{value: nameRegistry.fee()}(username, user, "secret", address(0));
         vm.stopPrank();
     }
 
